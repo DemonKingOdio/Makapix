@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art Gallery - Makapix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        
+        .artwork-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .artwork-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .artwork-image {
+            background: #2d3748;
+            padding: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+        
+        .artwork-image img {
+            display: block;
+            /* Safari - vendor prefix */
+            image-rendering: -webkit-optimize-contrast;
+            /* Firefox - vendor prefix */
+            image-rendering: -moz-crisp-edges;
+            /* Standard - Firefox */
+            image-rendering: crisp-edges;
+            /* Standard - Chrome/Edge */
+            image-rendering: pixelated;
+            /* IE/Edge legacy */
+            -ms-interpolation-mode: nearest-neighbor;
+        }
+        
+        .artwork-info {
+            padding: 30px;
+        }
+        
+        .artwork-info h2 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .metadata {
+            color: #718096;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .description {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .hashtags {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .social-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 60px;
+            opacity: 0.8;
+        }
+        
+        footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Pixel Art Gallery</h1>
+            <p>Showcasing pixel art with Makapix</p>
+            <span class="badge">Powered by Makapix Club</span>
+        </header>
+        
+        <main>
+            
+        <div class="artwork-card">
+            <div class="artwork-image" id="artwork-container-0">
+                <img src="IMG_20251030_164655.gif" alt="Four-Byte Burger" class="pixel-art-image" data-canvas="256x256" data-artwork-idx="0" />
+            </div>
+            <div class="artwork-info">
+                <h2>Four-Byte Burger</h2>
+                <p class="metadata">Canvas: 256x256 • Size: 8 KB</p>
+                <p class="description">Jack Haegar, 1985</p>
+                
+            </div>
+            <div class="social-section"><div id="makapix-widget-0" data-post-id="27371937-b4ad-40ae-8cec-7c426710d766"></div></div>
+        </div>
+        
+        </main>
+        
+        <footer>
+            <p>Published with <a href="https://makapix.club" target="_blank">Makapix Club</a></p>
+            <p>View on <a href="https://github.com/DemonKingOdio/Test" target="_blank">GitHub</a></p>
+        </footer>
+    </div>
+    
+    <!-- Makapix Widget Configuration -->
+    <script>
+        window.MAKAPIX_API_URL = 'https://dev.makapix.club/api';
+    </script>
+    <!-- Pixel Art Scaling Script -->
+    <script>
+        (function() {
+            function parseCanvas(canvas) {
+                const match = canvas.match(/(\d+)x(\d+)/);
+                if (!match) return null;
+                return {
+                    width: parseInt(match[1], 10),
+                    height: parseInt(match[2], 10)
+                };
+            }
+            
+            function calculateScaledSize(originalSize, containerWidth, maxHeight, padding) {
+                const availableWidth = containerWidth - padding;
+                const availableHeight = maxHeight - padding;
+                
+                const scaleX = Math.floor(availableWidth / originalSize.width);
+                const scaleY = Math.floor(availableHeight / originalSize.height);
+                const scale = Math.max(1, Math.min(scaleX, scaleY));
+                
+                return {
+                    width: originalSize.width * scale,
+                    height: originalSize.height * scale
+                };
+            }
+            
+            function updateImageSize(img) {
+                const container = img.closest('.artwork-image');
+                if (!container) return;
+                
+                const canvas = img.getAttribute('data-canvas');
+                if (!canvas) return;
+                
+                const originalSize = parseCanvas(canvas);
+                if (!originalSize) return;
+                
+                const containerRect = container.getBoundingClientRect();
+                if (containerRect.width === 0) {
+                    setTimeout(function() { updateImageSize(img); }, 50);
+                    return;
+                }
+                
+                const maxHeight = window.innerHeight * 0.7;
+                const scaledSize = calculateScaledSize(originalSize, containerRect.width, maxHeight, 120);
+                
+                if (scaledSize.width > 0 && scaledSize.height > 0) {
+                    img.style.width = scaledSize.width + 'px';
+                    img.style.height = scaledSize.height + 'px';
+                    img.style.imageRendering = 'pixelated';
+                }
+            }
+            
+            function initializeImages() {
+                const images = document.querySelectorAll('.pixel-art-image');
+                images.forEach(function(img) {
+                    updateImageSize(img);
+                    img.addEventListener('load', function() {
+                        updateImageSize(img);
+                        img.style.imageRendering = 'pixelated';
+                    }, { once: true });
+                });
+            }
+            
+            function handleResize() {
+                const images = document.querySelectorAll('.pixel-art-image');
+                images.forEach(updateImageSize);
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeImages);
+            } else {
+                setTimeout(initializeImages, 0);
+            }
+            
+            let resizeTimeout;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(handleResize, 100);
+            });
+        })();
+    </script>
+    <!-- Makapix Widget Script -->
+    <script src="https://dev.makapix.club/makapix-widget.js"></script>
+</body>
+</html>
